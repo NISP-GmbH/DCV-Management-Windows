@@ -49,13 +49,25 @@ python -m pip install --upgrade configparser Flask pywin32
 
 ```bash
 [Service]
-PythonPath=C:\Program Files\Python311\ # python path where python.exe is, without include python.exe
-AppPath=C:\dcv-management-windows\ # all the service files from this git
-DcvPath=C:\Program Files\NICE\DCV\Server\bin\dcv.exe # full path where dcv.exe is installed, with dcv.exe included
-CurlPath=C:\Windows\System32\curl.exe # full path of windows native curl, including curl.exe
-TimeToCloseUnusedSection=1800 # time, in secons,  to close unused sessions
-SessionType=console # type of session (Windows can run only console)
+PythonPath=C:\Program Files\Python311\
+AppPath=C:\dcv-management-windows\
+DcvPath=C:\Program Files\NICE\DCV\Server\bin\dcv.exe
+CurlPath=C:\Windows\System32\curl.exe
+TimeToCloseUnusedSection=1800
+SessionType=console
 ```
+
+Explained:
+
+```bash
+PythonPath  # python path where python.exe is, without include python.exe
+AppPath     # all the service files from this git
+DcvPath     # full path where dcv.exe is installed, with dcv.exe included
+CurlPath    # full path of windows native curl, including curl.exe
+TimeToCloseUnusedSection    # time, in secons, to close unused sessions
+SessionType # type of session (Windows can run only console)
+```
+
 - Open Powershell as Administrator
 - Go to the AppPath directory (using Powershell)
 - Execute the PowerShell script below that will read settings.ini and replace the variables where needed
