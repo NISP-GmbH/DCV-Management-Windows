@@ -20,10 +20,10 @@ The DCV Management service is currently capable to do:
 * List sessions
 * List sessions by owner
 * Check session timedout and automatically close them
+* Create a session when the user do the DCV Server login
 
 New features coming:
 * Request token access to access your session using SSH service
-* Create a session when the user do the DCV Server login
 
 # Software requirements
 - PowerShell 7.x or gerater
