@@ -22,6 +22,15 @@ if %errorlevel% neq 0 (
     exit /b %errorlevel%
 )
 
+REM Execute install_dcv_session_monitor.ps1
+echo Executing install_dcv_session_monitor.ps1...
+powershell.exe -File .\install_dcv_session_monitor.ps1
+if %errorlevel% neq 0 (
+    echo Error executing install_dcv_session_monitor.ps1
+    pause
+    exit /b %errorlevel%
+)
+
 REM Execute setup_task.ps1
 echo Executing setup_task.ps1...
 powershell.exe -File .\setup_task.ps1
