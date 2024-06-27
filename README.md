@@ -49,9 +49,11 @@ python -m pip install --upgrade configparser Flask pywin32
 
 ```bash
 [Service]
+AppBaseUrl=http://localhost:5000
 PythonPath=C:\Program Files\Python311\
 AppPath=C:\dcv-management-windows\
 DcvPath=C:\Program Files\NICE\DCV\Server\bin\dcv.exe
+DcvLogPath=C:\ProgramData\NICE\dcv\log\server.log
 CurlPath=C:\Windows\System32\curl.exe
 TimeToCloseUnusedSection=1800
 SessionType=console
@@ -60,9 +62,11 @@ SessionType=console
 Explained:
 
 ```bash
+AppBaseUrl  # the base url where DCV Management will be called
 PythonPath  # python path where python.exe is, without include python.exe
 AppPath     # all the service files from this git
 DcvPath     # full path where dcv.exe is installed, with dcv.exe included
+DcvLogPath  # full path where server.log, by DCV Server, is located
 CurlPath    # full path of windows native curl, including curl.exe
 TimeToCloseUnusedSection    # time, in secons, to close unused sessions
 SessionType # type of session (Windows can run only console)
