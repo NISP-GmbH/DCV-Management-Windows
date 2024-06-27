@@ -6,7 +6,7 @@ powershell.exe -Command "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Byp
 
 REM Execute remove_service.ps1
 echo Executing remove_service.ps1...
-powershell.exe -File .\remove_service.ps1
+powershell.exe -File .\remove_services.ps1
 if %errorlevel% neq 0 (
     echo Error executing remove_service.ps1
     pause
