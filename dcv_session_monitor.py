@@ -69,12 +69,9 @@ class LogMonitor:
 def main():
     monitor = LogMonitor()
 
-    try:
-        while True:
-            monitor.check_log()
-            time.sleep(POLL_INTERVAL)
-    except KeyboardInterrupt:
-        print("Keyboard interrupt received")
+    while True:
+        monitor.check_log()
+        time.sleep(POLL_INTERVAL)
 
 if __name__ == "__main__":
     main()

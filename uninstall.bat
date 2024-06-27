@@ -9,7 +9,6 @@ echo Executing remove_service.ps1...
 powershell.exe -File .\remove_services.ps1
 if %errorlevel% neq 0 (
     echo Error executing remove_service.ps1
-    pause
     exit /b %errorlevel%
 )
 
@@ -18,9 +17,7 @@ echo Executing remove_task.ps1...
 powershell.exe -File .\remove_task.ps1
 if %errorlevel% neq 0 (
     echo Error executing remove_task.ps1
-    pause
     exit /b %errorlevel%
 )
 
 echo All uninstallation scripts executed successfully.
-pause
