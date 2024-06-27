@@ -180,15 +180,17 @@ def check_session_timedout(owner=None):
 
         format_string = "%Y-%m-%dT%H:%M:%S.%fZ"
         creation_time = datetime.strptime(creation_time_str, format_string)
-        print(last_disconnection_time_str)
+        current_time = datetime.now(timezone.utc)
+
         if last_disconnection_time_str:
             # If there's a disconnection time, use it
             disconnection_time = datetime.strptime(last_disconnection_time_str, format_string)
+            time_difference = disconnection_time - current_time
         else:
             # If there's no disconnection time, use the current time
             disconnection_time = datetime.now(timezone.utc)
+            time_difference = disconnection_time - creation_time.replace(tzinfo=timezone.utc)
 
-        time_difference = disconnection_time - creation_time.replace(tzinfo=timezone.utc)
         difference_in_seconds = time_difference.total_seconds()
 
         if num_connections == 0:
