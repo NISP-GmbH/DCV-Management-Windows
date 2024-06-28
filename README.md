@@ -115,3 +115,28 @@ You can expect something like this:
 {"returncode":"200","stderr":"error","stdout":"test"}
 200
 ```
+
+# HTTP requests to the DCV Management API Service
+
+* Counting how much sessions a specific owner has:
+```
+curl -s http://localhost:5000/count-sessions-by-owner?owner=francisco
+```
+
+* List all sessions
+```
+curl -s http://localhost:5000/list-sessions
+```
+
+* Create a session with specific owner:
+```
+curl -s http://localhost:5000/create-session?owner=centos
+```
+* Check a session with specific owner and close the session if there are no one connected in last 30 minutes
+```
+ curl -s http://localhost:5000/check-session-timedout?owner=francisco
+```
+
+* List all owners with sessions created
+```
+curl -s http://localhost:5000/list-sessions-owners
