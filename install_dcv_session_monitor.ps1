@@ -11,6 +11,7 @@ Start-ScheduledTask -TaskName "DCV Session Monitor"
 # Create a Windows service for the app
 $serviceName = "DCV Session Monitor Service"
 $displayName = "DCV Session Monitor Service"
+$description = "Monitor the DCV log file to create sessions when needed"
 $binaryPath = "powershell.exe -ExecutionPolicy Bypass -File C:\@@AppPath@@\run_dcv_session_monitor.ps1"
 
 New-Service -Name $serviceName -DisplayName $displayName -BinaryPathName $binaryPath -StartupType Automatic
