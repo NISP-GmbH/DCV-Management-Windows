@@ -15,4 +15,8 @@ $binaryPath = "powershell.exe -ExecutionPolicy Bypass -File C:\@@AppPath@@\run_d
 
 New-Service -Name $serviceName -DisplayName $displayName -BinaryPathName $binaryPath -StartupType Automatic
 
+sc.exe description $serviceName $description
+sc.exe failure $serviceName reset= 86400 actions= restart/60000/restart/60000/restart/60000
+sc.exe failureflag $serviceName 1
+
 Write-Host "DCV Management scheduled task and Windows service have been created. The app will start automatically on next system boot."
