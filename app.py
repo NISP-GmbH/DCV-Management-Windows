@@ -3,6 +3,8 @@ import configparser
 import subprocess
 import os
 import json
+import signal
+import sys
 from datetime import datetime, timezone
 
 app = Flask(__name__)
@@ -15,6 +17,16 @@ config.read('settings.ini')
 dcv_path = config.get('Service', 'DcvPath')
 time_to_close = int(config.get('Service', 'TimeToCloseUnusedSection'))
 session_type = config.get('Service', 'SessionType')
+
+
+# handle termination signal
+def signal_handler(signum, frame):
+    print(f"Received signal {signum}. Shutting down gracefully...")
+    # Perform any cleanup operations here if needed
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
 @app.route('/check-all-sessions', methods=['GET'])
 def check_all_sessions():
@@ -263,4 +275,8 @@ def get_data():
     return jsonify(return_root)
 
 if __name__ == '__main__':
-    app.run(debug=False)  # Set debug=False for production
+    try:
+        app.run(host='0.0.0.0', port=5000, debug=False)
+    except KeyboardInterrupt:
+        print("Interrupted. Shutting down...")
+        sys.exit(0)
