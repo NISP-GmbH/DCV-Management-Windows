@@ -6,7 +6,7 @@ powershell.exe -Command "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Byp
 
 REM Execute remove_services.ps1
 echo Executing remove_services.ps1...
-powershell.exe -File .\stop_dcvm_app.ps1
+powershell.exe -File .\stop_dcv_apps.ps1
 powershell.exe -File .\remove_services.ps1
 if %errorlevel% neq 0 (
     echo Error executing remove_services.ps1
