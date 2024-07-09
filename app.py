@@ -244,7 +244,10 @@ def get_list_sessions():
         command = [dcv_path, "list-sessions"]
         process = subprocess.run(command, capture_output=True, text=True, check=True)
         output = process.stdout
-        return jsonify({"message": output}), 200
+        if not output:
+            return jsonify({"message": "empty"}), 200
+        else:
+            return jsonify({"message": output}), 200
     except subprocess.CalledProcessError as error:
         return jsonify({"message": f"Error: {error.stderr}"}), 500
     except Exception as e:
