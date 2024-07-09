@@ -14,10 +14,10 @@ $displayName = "DCV Session Monitor Service"
 $description = "Monitor the DCV log file to create sessions when needed"
 $binaryPath = "powershell.exe -ExecutionPolicy Bypass -File @@AppPath@@\run_dcv_session_monitor.ps1"
 
-New-Service -Name $serviceName -DisplayName $displayName -BinaryPathName $binaryPath -StartupType Automatic
-
-sc.exe description $serviceName $description
+sc.exe create $serviceName binPath= $binaryPath start= auto DisplayName= $displayName
 sc.exe failure $serviceName reset= 86400 actions= restart/60000/restart/60000/restart/60000
 sc.exe failureflag $serviceName 1
+sc.exe description $serviceName $description
+sc.exe control $serviceName paramchange
 
 Write-Host "DCV Management scheduled task and Windows service have been created. The app will start automatically on next system boot."

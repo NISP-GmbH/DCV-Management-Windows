@@ -14,12 +14,10 @@ $displayName = "DCV Management Service"
 $binaryPath = "powershell.exe -ExecutionPolicy Bypass -File @@AppPath@@\run_dcvm_app.ps1"
 $description = "This service manages the DCV Management Service application"
 
-New-Service -Name $serviceName -DisplayName $displayName -BinaryPathName $binaryPath -StartupType Automatic
-
-sc.exe config $serviceName binPath= "$binaryPathStart" start= auto
+sc.exe create $serviceName binPath= $binaryPath start= auto DisplayName= $displayName
 sc.exe failure $serviceName reset= 86400 actions= restart/60000/restart/60000/run/60000
 sc.exe failureflag $serviceName 1
-sc.exe control $serviceName paramchange
 sc.exe description $serviceName $description
+sc.exe control $serviceName paramchange
 
 Write-Host "DCV Management scheduled task and Windows service have been created. The app will start automatically on next system boot."
