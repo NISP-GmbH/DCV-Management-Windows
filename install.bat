@@ -36,14 +36,4 @@ if %errorlevel% neq 0 (
     exit /b %errorlevel%
 )
 
-<#
-REM Execute setup_login_task.ps1
-echo Executing setup_login_task.ps1...
-powershell.exe -File .\setup_login_task.ps1
-if %errorlevel% neq 0 (
-    echo Error executing setup_login_task.ps1
-    exit /b %errorlevel%
-)
-#>
-
 echo All scripts executed successfully.

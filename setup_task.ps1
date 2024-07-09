@@ -49,7 +49,7 @@ $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -Repetiti
 
 # Define the task action - run PowerShell script with logging
 $logFile = Join-Path $logDir "invoke_api_log.txt"
-$actionArgument = "-ExecutionPolicy Bypass -File `"$scriptPath`" *>> `"$logFile`" 2>&1"
+$actionArgument = "-ExecutionPolicy Bypass -File `"$scriptPath`" >> `"$logFile`" 2>&1"
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $actionArgument
 
 # Define the principal - run with highest privileges
@@ -77,8 +77,13 @@ try {
         Write-Output "Scheduled task 'InvokeDcvManagementScript' is verified."
         
         # Start the task immediately
-        Start-ScheduledTask -TaskName "InvokeDcvManagementScript"
-        Write-Output "Scheduled task 'InvokeDcvManagementScript' has been started."
+        try {
+            Start-ScheduledTask -TaskName "InvokeDcvManagementScript"
+            Write-Output "Scheduled task 'InvokeDcvManagementScript' has been started."
+        } catch {
+            Write-Warning "Failed to start the task immediately: $_"
+            Write-Output "The task is created and will run at its next scheduled time."
+        }
     } else {
         Write-Error "Scheduled task 'InvokeDcvManagementScript' not found."
     }
