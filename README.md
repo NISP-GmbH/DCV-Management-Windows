@@ -74,6 +74,10 @@ SessionType # type of session (Windows can run only console)
 
 - Open Powershell as Administrator
 - Go to the AppPath directory (using Powershell)
+- We recommend to ByPass security checks for this session:
+```bash
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
 - Execute the PowerShell script below that will read settings.ini and replace the variables where needed
 
 ```bash
