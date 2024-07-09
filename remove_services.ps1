@@ -14,28 +14,48 @@ foreach ($service in $services) {
     $serviceName = $service.ServiceName
     $taskName = $service.TaskName
 
-    # Disable and stop the service
-    if (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) {
-        Set-Service -Name $serviceName -StartupType Disabled
-        Stop-Service -Name $serviceName -Force -ErrorAction SilentlyContinue
-        Write-Host "Service '$serviceName' has been disabled and stopped."
-    } else {
+    Write-Host "Processing service '$serviceName' and task '$taskName'..."
+
+    # Check if the service exists
+    $serviceExists = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+
+    if ($serviceExists) {
+        # Try to disable and stop the service
+        try {
+            Set-Service -Name $serviceName -StartupType Disabled -ErrorAction Stop
+            Stop-Service -Name $serviceName -Force -ErrorAction Stop
+            Write-Host "Service '$serviceName' has been disabled and stopped."
+        }
+        catch {
+            Write-Host "Failed to disable or stop service '$serviceName'. Error: $_"
+        }
+
+        # Try to remove the service
+        try {
+            sc.exe delete $serviceName
+            Write-Host "Service '$serviceName' has been removed."
+        }
+        catch {
+            Write-Host "Failed to remove service '$serviceName'. Error: $_"
+        }
+    }
+    else {
         Write-Host "Service '$serviceName' not found."
     }
 
-    # Remove the service
-    if (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) {
-        sc.exe delete $serviceName
-        Write-Host "Service '$serviceName' has been removed."
-    } else {
-        Write-Host "Service '$serviceName' not found, no need to remove."
-    }
-
     # Remove the scheduled task
-    if (Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue) {
-        Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
-        Write-Host "Scheduled task '$taskName' has been removed."
-    } else {
+    $taskExists = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+
+    if ($taskExists) {
+        try {
+            Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
+            Write-Host "Scheduled task '$taskName' has been removed."
+        }
+        catch {
+            Write-Host "Failed to remove scheduled task '$taskName'. Error: $_"
+        }
+    }
+    else {
         Write-Host "Scheduled task '$taskName' not found."
     }
 
