@@ -55,7 +55,7 @@ class LogMonitor:
     def check_and_create_session(self, username):
         # Check if there are any existing sessions
         response = requests.get(f'{app_base_url}/list-sessions')
-        if response.json()['message'] == '':
+        if response.json()['message'] == 'empty':
             # No existing sessions, create a new one
             create_url = f'{app_base_url}/create-session?owner={username}'
             response = requests.get(create_url)
