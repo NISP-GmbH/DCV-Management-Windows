@@ -11,7 +11,7 @@ Start-ScheduledTask -TaskName "DCV Management"
 # Create a Windows service for the Flask app
 $serviceName = "DCV Management Service"
 $displayName = "DCV Management Service"
-$binaryPath = "powershell.exe -ExecutionPolicy Bypass -File C:\@@AppPath@@\run_dcvm_app.ps1"
+$binaryPath = "powershell.exe -ExecutionPolicy Bypass -File @@AppPath@@\run_dcvm_app.ps1"
 $description = "This service manages the DCV Management Service application"
 
 New-Service -Name $serviceName -DisplayName $displayName -BinaryPathName $binaryPath -StartupType Automatic
