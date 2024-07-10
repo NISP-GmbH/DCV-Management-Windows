@@ -36,9 +36,9 @@ New features coming:
 python.exe get-pip.py
 py -m pip install --upgrade pip
 ```
-- Python libraries: Flask, pywin32, configparse
+- Python libraries: Flask, pywin32, configparse, requests
 ```bash
-python -m pip install --upgrade configparser Flask pywin32
+python -m pip install --upgrade configparser Flask pywin32 requests
 ```
 
 # How to install
