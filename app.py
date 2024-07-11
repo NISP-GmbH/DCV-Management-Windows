@@ -191,26 +191,25 @@ def check_session_timedout(owner=None):
         last_disconnection_time_str = data.get("last-disconnection-time")
 
         format_string = "%Y-%m-%dT%H:%M:%S.%fZ"
-        creation_time = datetime.strptime(creation_time_str, format_string)
+        creation_time = datetime.strptime(creation_time_str, format_string).replace(tzinfo=timezone.utc)
         current_time = datetime.now(timezone.utc)
 
         if last_disconnection_time_str:
             # If there's a disconnection time, use it
-            disconnection_time = datetime.strptime(last_disconnection_time_str, format_string)
-            time_difference = disconnection_time - current_time
+            disconnection_time = datetime.strptime(last_disconnection_time_str, format_string).replace(tzinfo=timezone.utc)
+            idle_time = current_time - disconnection_time
         else:
             # If there's no disconnection time, use the current time
-            disconnection_time = datetime.now(timezone.utc)
-            time_difference = disconnection_time - creation_time.replace(tzinfo=timezone.utc)
+            idle_time = current_time - creation_time
 
-        difference_in_seconds = time_difference.total_seconds()
+        idle_seconds = idle_time.total_seconds()
 
         if num_connections == 0:
-            if difference_in_seconds > time_to_close:
+            if idle_seconds > time_to_close:
                 close_response, close_status = close_session(owner)
                 return close_response, close_status
             else:
-                return jsonify({"message": f"There are no users connected, but the time to timeout ({time_to_close} seconds) has not been reached yet. Current idle time: {difference_in_seconds:.2f} seconds"}), 200
+                return jsonify({"message": f"There are no users connected, but the time to timeout ({time_to_close} seconds) has not been reached yet. Current idle time: {idle_seconds:.2f} seconds"}), 200
         else:
             return jsonify({"message": "There are users still connected under DCV session."}), 200
 
