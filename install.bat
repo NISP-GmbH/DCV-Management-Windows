@@ -12,27 +12,19 @@ if %errorlevel% neq 0 (
     exit /b %errorlevel%
 )
 
-REM Execute install_api_app.ps1
-echo Executing install_api_app.ps1...
-powershell.exe -File .\install_api_app.ps1
+REM Install the combined DCV management service using pywin32
+echo Installing DCV Management Service...
+python dcvm_service.py --startup auto install
 if %errorlevel% neq 0 (
-    echo Error executing install_api_app.ps1
+    echo Error installing DCV Management Service.
     exit /b %errorlevel%
 )
 
-REM Execute install_dcv_session_monitor.ps1
-echo Executing install_dcv_session_monitor.ps1...
-powershell.exe -File .\install_dcv_session_monitor.ps1
+REM Start the DCV Management Service
+echo Starting DCV Management Service...
+python dcvm_service.py start
 if %errorlevel% neq 0 (
-    echo Error executing install_dcv_session_monitor.ps1
-    exit /b %errorlevel%
-)
-
-REM Execute setup_task.ps1
-echo Executing setup_task.ps1...
-powershell.exe -File .\setup_task.ps1
-if %errorlevel% neq 0 (
-    echo Error executing setup_task.ps1
+    echo Error starting DCV Management Service.
     exit /b %errorlevel%
 )
 

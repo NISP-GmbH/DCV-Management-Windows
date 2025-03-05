@@ -26,9 +26,10 @@ New features coming:
 * Request token access to access your session using SSH service
 
 # Software requirements
-- PowerShell 7.x or gerater
-- Python 3.11 or lower; 3.12 can not be used due pywin32 issues; Python needs to be installed as administrator and for all users (or, if you understand how, give the right permissions to this service)
-- Python pip package 
+- PowerShell 7.x or greater.
+- Python 3.11 or lower; __3.12 or 3.13__ can not be used. You can download the .msi from [here.](https://www.python.org/ftp/python/3.11.0/)
+- Python needs to be installed as administrator and for all users (start the installer as administrator)
+- Python pip package is also needed
 ```bash
 # download get-pip.py from
 # https://pip.pypa.io/en/stable/installation/
@@ -103,7 +104,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 # How to restart the DCV Management API
 
 ```bash
-.\restart_dcv_management.bat
+.\manage_dcvm_service.bat restart
 ```
 
 # How to test the DCV Management API

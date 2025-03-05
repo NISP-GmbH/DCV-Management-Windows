@@ -8,7 +8,9 @@ import configparser
 POLL_INTERVAL = 1  # Time in seconds between checks
 
 config = configparser.ConfigParser()
-config.read('settings.ini')
+config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.ini')
+config.read(config_path)
+
 dcv_log_path = config.get('Service', 'DcvLogPath')
 app_base_url = config.get('Service', 'AppBaseUrl')
 
@@ -55,7 +57,9 @@ class LogMonitor:
     def check_and_create_session(self, username):
         # Check if there are any existing sessions
         response = requests.get(f'{app_base_url}/list-sessions')
-        if response.json()['message'] == 'empty':
+        sessions = response.json()['message']
+
+        if not sessions:  # If sessions is an empty list, it's considered "empty"
             # No existing sessions, create a new one
             create_url = f'{app_base_url}/create-session?owner={username}'
             response = requests.get(create_url)
