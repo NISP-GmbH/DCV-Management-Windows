@@ -199,7 +199,13 @@ def check_session_timedout(session_identifier=None):
         process = subprocess.run(command, capture_output=True, text=True, check=True)
         output = process.stdout
         data = json.loads(output)
+
         time_to_close = int(config.get('Service', 'TimeToCloseUnusedSection'))
+        if time_to_close == 0:
+            return jsonify({
+                "message": "Automatic session closure is disabled because TimeToCloseUnusedSection is set to zero."
+            }), 200
+
         num_connections = data["num-of-connections"]
         creation_time_str = data["creation-time"]
         last_disconnection_time_str = data.get("last-disconnection-time")
