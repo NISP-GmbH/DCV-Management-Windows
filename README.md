@@ -26,8 +26,8 @@ New features coming:
 * Request token access to access your session using SSH service
 
 # Software requirements
-- PowerShell 7.x or greater.
-- Python 3.11 or lower; __3.12 or 3.13__ can not be used. You can download the .msi from [here.](https://www.python.org/ftp/python/3.11.0/)
+- PowerShell 5.1 or greater.
+- Python 3.11 or lower; __3.12 or 3.13__ is not officialy recommended. You can download the .msi from [here.](https://www.python.org/ftp/python/3.11.0/)
 - Python needs to be installed as administrator and for all users (start the installer as administrator)
 - Python pip package is also needed
 ```bash
@@ -69,7 +69,7 @@ AppPath     # all the service files from this git
 DcvPath     # full path where dcv.exe is installed, with dcv.exe included
 DcvLogPath  # full path where server.log, by DCV Server, is located
 CurlPath    # full path of windows native curl, including curl.exe
-TimeToCloseUnusedSection    # time, in secons, to close unused sessions
+TimeToCloseUnusedSection    # time, in secons, to close unused sessions; 0 means auto closing feature will not close sessions
 SessionType # type of session (Windows can run only console)
 ```
 
@@ -96,6 +96,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 - Execute:
 
 ```bash
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\uninstall.bat
 ```
 
@@ -106,6 +107,8 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```bash
 .\manage_dcvm_service.bat restart
 ```
+
+Or use the Windows Service Manager (services.msc).
 
 # How to test the DCV Management API
 
