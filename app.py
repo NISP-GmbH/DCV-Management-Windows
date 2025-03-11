@@ -12,13 +12,11 @@ app = Flask(__name__)
 return_root = {"return": "This is an API used to manage your DCV services."}
 
 # Read the settings.ini file
-config = configparser.ConfigParser()
-config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.ini')
-config.read(config_path)
-dcv_path = config.get('Service', 'DcvPath')
-time_to_close = int(config.get('Service', 'TimeToCloseUnusedSection'))
-session_type = config.get('Service', 'SessionType')
-
+def get_config():
+    config = configparser.ConfigParser()
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.ini')
+    config.read(config_path)
+    return config
 
 # handle termination signal (only when running as the main program)
 def signal_handler(signum, frame):
@@ -130,12 +128,16 @@ def create_session(owner=None):
     if not owner:
         return jsonify({"message": "Missing owner parameter. Please specify owner in the query string."}), 400
 
-    response = count_sessions(owner)  # tuple: json, http code
+    response = count_sessions(owner)
     data = response[0]  # json part
     data_parsed = json.loads(data.get_data(as_text=True))
     owner_count = int(data_parsed["message"])
 
     if owner_count == 0:
+        # Read config dynamically
+        config = get_config()
+        dcv_path = config.get('Service', 'DcvPath')
+        session_type = config.get('Service', 'SessionType')
         command = [dcv_path, "create-session", "--owner", owner, "--name", owner, "--type", session_type, owner]
         try:
             process = subprocess.run(command, capture_output=True, text=True, check=True)
@@ -144,7 +146,7 @@ def create_session(owner=None):
             app.logger.error(f"Error creating session: {error.stderr}")
             return jsonify({"message": f"Error: Failed to run create-session. {error.stderr}"}), 500
     else:
-        return jsonify({"message": "Session already exists.", "count": owner_count}), 409  # Using 409 Conflict for existing session
+        return jsonify({"message": "Session already exists.", "count": owner_count}), 409
 
 @app.route('/close-session', methods=['GET'])
 def close_session(session_identifier=None):
@@ -161,6 +163,8 @@ def close_session(session_identifier=None):
     count = sum(1 for session in sessions_list if session[0] == session_identifier)
 
     if count > 0:
+        config = get_config()
+        dcv_path = config.get('Service', 'DcvPath')
         command = [dcv_path, "close-session", session_identifier]
         try:
             process = subprocess.run(command, capture_output=True, text=True, check=True)
@@ -175,23 +179,32 @@ def list_connections(owner=None):
     owner = request.args.get('owner')
     if not owner:
         return jsonify({"message": "Missing owner parameter. Please specify owner in the query string."}), 400
-    command= " ".join([dcv_path, "list-connections", owner])
+    
+    config = get_config()
+    dcv_path = config.get('Service', 'DcvPath')
+    command = " ".join([dcv_path, "list-connections", owner])
     try:
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+        process = subprocess.Popen(
+            command, shell=True, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, stdin=subprocess.PIPE
+        )
         output, error = process.communicate()  # Capture stdout and stderr
     except subprocess.CalledProcessError as error:
-            print("Error:", error)
+        print("Error:", error)
     output = output.decode("utf-8")
     
-    return jsonify({"message": output}), 20
+    return jsonify({"message": output}), 200
 
 @app.route('/check-session-timedout', methods=['GET'])
 def check_session_timedout(session_identifier=None):
-    # Get session id from query parameter "session_id"
     if session_identifier is None:
         session_identifier = request.args.get('session_id')
     if not session_identifier:
         return jsonify({"message": "Missing session identifier. Please specify session_id in the query string."}), 400
+
+    config = get_config()
+    dcv_path = config.get('Service', 'DcvPath')
+    time_to_close = int(config.get('Service', 'TimeToCloseUnusedSection'))
 
     command = [dcv_path, "describe-session", session_identifier, "--json"]
 
@@ -200,7 +213,6 @@ def check_session_timedout(session_identifier=None):
         output = process.stdout
         data = json.loads(output)
 
-        time_to_close = int(config.get('Service', 'TimeToCloseUnusedSection'))
         if time_to_close == 0:
             return jsonify({
                 "message": "Automatic session closure is disabled because TimeToCloseUnusedSection is set to zero."
@@ -258,6 +270,9 @@ def list_sessions_owners():
 @app.route('/list-sessions', methods=['GET'])
 def get_list_sessions():
     try:
+        config = get_config()  # Read settings dynamically
+        dcv_path = config.get('Service', 'DcvPath')  # Get current dcv_path value
+
         # Execute the command with the --json flag
         command = [dcv_path, "list-sessions", "--json"]
         process = subprocess.run(command, capture_output=True, text=True, check=True)
