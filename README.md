@@ -145,6 +145,11 @@ curl -s http://localhost:5000/create-session?owner=centos
  curl -s http://localhost:5000/check-session-timedout?owner=francisco
 ```
 
+* Close the session using session id
+```
+curl -X GET "http://localhost:5000/close-session?session_id=francisco"
+```
+
 * List all owners with sessions created
 ```
 curl -s http://localhost:5000/list-sessions-owners
