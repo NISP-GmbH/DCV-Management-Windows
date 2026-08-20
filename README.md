@@ -6,7 +6,7 @@ the previous Python implementation.
 
 ## Preview
 
-<img width="1064" height="1150" alt="Image" src="https://github.com/user-attachments/assets/24bfeeb4-bd0f-4a0f-9c80-1134d44e828f" />
+<img width="1249" height="1134" alt="Image" src="https://github.com/user-attachments/assets/068d1f9a-4abc-4e9a-8a17-331f28cd4561" />
 
 ## What it does
 
