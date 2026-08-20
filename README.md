@@ -37,7 +37,7 @@ That link always resolves to the newest release, so it does not go stale.
 
 ## Install (MSI)
 
-1. Download the MSI above (or build it, see **Building**).
+1. Download the MSI above.
 2. Run it (elevated):
    ```
    msiexec /i "NI-SP-DCV-Windows-Management.msi"
