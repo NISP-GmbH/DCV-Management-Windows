@@ -31,12 +31,13 @@ The service exposes an HTTP API (default `:5000`) and a browser admin UI at
 Download the latest installer from the
 [**Releases** page](https://github.com/NISP-GmbH/DCV-Management-Windows/releases/latest),
 or directly:
-[**NI-SP-DCV-Windows-Management-v1.0.0.zip**](https://github.com/NISP-GmbH/DCV-Management-Windows/releases/download/v1.0.0/NI-SP-DCV-Windows-Management-v1.0.0.zip)
-— the zip contains the MSI installer and an `INSTALL.txt`.
+[**NI-SP-DCV-Windows-Management.msi**](https://github.com/NISP-GmbH/DCV-Management-Windows/releases/latest/download/NI-SP-DCV-Windows-Management.msi)
+
+That link always resolves to the newest release, so it does not go stale.
 
 ## Install (MSI)
 
-1. Download and unzip the release above (or build it, see **Building**).
+1. Download the MSI above (or build it, see **Building**).
 2. Run it (elevated):
    ```
    msiexec /i "NI-SP-DCV-Windows-Management.msi"
