@@ -143,10 +143,13 @@ dcvm.exe uninstall   dcvm.exe restart  dcvm.exe run   (foreground, for testing)
 ## Migrating from the old Python version
 
 The legacy Python service uses the **same** service name (`DCVManagement`).
-Before installing this MSI, remove the old install as Administrator:
+Before installing this MSI, remove the old install as Administrator.
+
+Download [**uninstall-old-python.bat**](https://github.com/NISP-GmbH/DCV-Management-Windows/releases/latest/download/uninstall-old-python.bat) — it is attached to every release
+alongside the MSI — and run it from an elevated prompt:
 
 ```
-scripts\uninstall-old-python.bat
+uninstall-old-python.bat
 ```
 
 What it does:
