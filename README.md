@@ -6,7 +6,21 @@ the previous Python implementation.
 
 ## Preview
 
-<img width="1249" height="1134" alt="Image" src="https://github.com/user-attachments/assets/068d1f9a-4abc-4e9a-8a17-331f28cd4561" />
+Click a thumbnail to open it full size.
+
+<table>
+<tr>
+<td align="center" valign="top"><a href="https://github.com/user-attachments/assets/d89f3932-a401-4223-b165-0ae729adc21a"><img src="https://github.com/user-attachments/assets/d89f3932-a401-4223-b165-0ae729adc21a" width="200" alt="Settings · General"></a><br><sub>Settings · General</sub></td>
+<td align="center" valign="top"><a href="https://github.com/user-attachments/assets/89b4e5f5-9648-45f3-8857-c7246572c3e7"><img src="https://github.com/user-attachments/assets/89b4e5f5-9648-45f3-8857-c7246572c3e7" width="200" alt="Settings · Session"></a><br><sub>Settings · Session</sub></td>
+<td align="center" valign="top"><a href="https://github.com/user-attachments/assets/ef4239a7-4536-48a6-b896-e1143472fd5e"><img src="https://github.com/user-attachments/assets/ef4239a7-4536-48a6-b896-e1143472fd5e" width="200" alt="Settings · Hardware"></a><br><sub>Settings · Hardware</sub></td>
+<td align="center" valign="top"><a href="https://github.com/user-attachments/assets/6480bc86-1d90-432c-8372-9e4cd58c4365"><img src="https://github.com/user-attachments/assets/6480bc86-1d90-432c-8372-9e4cd58c4365" width="200" alt="Sessions"></a><br><sub>Sessions</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top"><a href="https://github.com/user-attachments/assets/06d4f87a-4a9b-4d90-8a9c-7f5fb9856201"><img src="https://github.com/user-attachments/assets/06d4f87a-4a9b-4d90-8a9c-7f5fb9856201" width="200" alt="Service"></a><br><sub>Service</sub></td>
+<td align="center" valign="top"><a href="https://github.com/user-attachments/assets/bce91658-d6d2-4b9d-91bb-29e7ead99d16"><img src="https://github.com/user-attachments/assets/bce91658-d6d2-4b9d-91bb-29e7ead99d16" width="200" alt="Logs"></a><br><sub>Logs</sub></td>
+<td align="center" valign="top"><a href="https://github.com/user-attachments/assets/f9225571-7ccc-4786-a8ca-f2f22d371220"><img src="https://github.com/user-attachments/assets/f9225571-7ccc-4786-a8ca-f2f22d371220" width="200" alt="API"></a><br><sub>API</sub></td>
+</tr>
+</table>
 
 ## What it does
 
@@ -16,6 +30,7 @@ the previous Python implementation.
 * Auto-close idle sessions after a configurable timeout
 * Auto-create a session when a user logs in to the DCV server (log-driven)
 * Optionally lock the local physical keyboard/mouse while a session is active or a user is connected to the session
+* Optionally disable session sharing (owner only) or limit how many clients may join a session
 * A loopback-only web admin console to edit configuration, view/manage sessions, and control the service
 
 The service exposes an HTTP API (default `:5000`) and a browser admin UI at
@@ -86,10 +101,22 @@ Tabs:
 * **Settings** — edit every `settings.ini` value with validation. Changes are
   written and applied live (the service **hot-reloads** its configuration; it is
   not restarted); only changing the **Port** needs a service restart, since the
-  listener is bound at startup. Next to **DCV server log path** the **Open** and
-  **Open dir** buttons open the log file / its folder on the server's desktop. At
-  the bottom is a **Recover: unlock all input** button that re-enables any local
-  input devices left disabled by an interrupted session.
+  listener is bound at startup. The settings are grouped into three cards:
+  * **General** — DCV paths, port, base URL. Next to **DCV server log path** the
+    **Open** and **Open dir** buttons open the log file / its folder on the
+    server's desktop.
+  * **Session** — idle timeout, session type, session sharing, IDD unplug.
+    **Disable session sharing** lets only the session owner connect (DCV
+    `max-concurrent-clients` = 1); while it is off, **Max concurrent clients**
+    sets the limit (`-1` unlimited, `3` = owner + 2 others). DCV may need the
+    session recreated or `dcvserver` restarted to pick up a sharing change.
+  * **Hardware** — which local devices are blocked during a session, and how.
+    At the bottom, **Recover: unlock all input** re-enables any local input
+    devices left disabled by an interrupted session.
+
+  Fields that only matter for another setting sit indented under it and are
+  grayed out while they have no effect. Every ⓘ icon opens a help window (one
+  fact per line) with **Copy** and **Close** buttons.
 * **Sessions** — list, create, and close DCV sessions.
 * **Services** — status of `DCVManagement` (this service) and `dcvserver` (DCV
   Server), with a **Restart** button for each. Only these two services can be
